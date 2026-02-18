@@ -179,7 +179,7 @@ func TestParseRawString(t *testing.T) {
 
 func TestParserPool(t *testing.T) {
 	var pp ParserPool
-	for i := 0; i < 10; i++ {
+	for range 10 {
 		p := pp.Get()
 		if _, err := p.Parse("null"); err != nil {
 			t.Fatalf("cannot parse null: %s", err)
@@ -1206,7 +1206,7 @@ func TestParseBigObject(t *testing.T) {
 
 	// build big json object
 	var ss []string
-	for i := 0; i < itemsCount; i++ {
+	for i := range itemsCount {
 		s := fmt.Sprintf(`"key_%d": "value_%d"`, i, i)
 		ss = append(ss, s)
 	}
@@ -1220,7 +1220,7 @@ func TestParseBigObject(t *testing.T) {
 	}
 
 	// Look up object items
-	for i := 0; i < itemsCount; i++ {
+	for i := range itemsCount {
 		k := fmt.Sprintf("key_%d", i)
 		expectedV := fmt.Sprintf("value_%d", i)
 		sb := v.GetStringBytes(k)
@@ -1240,12 +1240,12 @@ func TestParseGetConcurrent(t *testing.T) {
 	concurrency := 10
 	ch := make(chan error, concurrency)
 	s := `{"foo": "bar", "empty_obj": {}}`
-	for i := 0; i < concurrency; i++ {
+	for range concurrency {
 		go func() {
 			ch <- testParseGetSerial(s)
 		}()
 	}
-	for i := 0; i < concurrency; i++ {
+	for range concurrency {
 		select {
 		case err := <-ch:
 			if err != nil {
@@ -1259,7 +1259,7 @@ func TestParseGetConcurrent(t *testing.T) {
 
 func testParseGetSerial(s string) error {
 	var p Parser
-	for i := 0; i < 100; i++ {
+	for range 100 {
 		v, err := p.Parse(s)
 		if err != nil {
 			return fmt.Errorf("cannot parse %q: %s", s, err)

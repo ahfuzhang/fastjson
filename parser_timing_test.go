@@ -78,7 +78,7 @@ func BenchmarkObjectGet(b *testing.B) {
 func benchmarkObjectGet(b *testing.B, itemsCount, lookupsCount int) {
 	b.StopTimer()
 	var ss []string
-	for i := 0; i < itemsCount; i++ {
+	for i := range itemsCount {
 		s := fmt.Sprintf(`"key_%d": "value_%d"`, i, i)
 		ss = append(ss, s)
 	}
@@ -97,7 +97,7 @@ func benchmarkObjectGet(b *testing.B, itemsCount, lookupsCount int) {
 				panic(fmt.Errorf("unexpected error: %s", err))
 			}
 			o := v.GetObject()
-			for i := 0; i < lookupsCount; i++ {
+			for range lookupsCount {
 				sb := o.Get(key).GetStringBytes()
 				if string(sb) != expectedValue {
 					panic(fmt.Errorf("unexpected value; got %q; want %q", sb, expectedValue))
