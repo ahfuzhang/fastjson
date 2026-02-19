@@ -48,7 +48,8 @@ func TestArena(t *testing.T) {
 
 func testArena(a *Arena) error {
 	o := a.NewObject()
-	o.Set("nil1", a.NewNull())
+	key := a.CloneString("nil1")
+	o.Set(key, a.NewNull())
 	o.Set("nil2", nil)
 	o.Set("false", a.NewFalse())
 	o.Set("true", a.NewTrue())

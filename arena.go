@@ -20,6 +20,16 @@ type Arena struct {
 	c cache
 }
 
+// CloneString copies s into the internal buffer at a and returns it.
+//
+// This function is useful for cloning object keys before passing them to Value.Set() and Object.Set(),
+// in order to remove references to the underlying byte slice, so GC could free it up.
+func (a *Arena) CloneString(s string) string {
+	n := len(a.b)
+	a.b = append(a.b, s...)
+	return b2s(a.b[n : n+len(s)])
+}
+
 // Reset resets all the Values allocated by a.
 //
 // Values previously allocated by a cannot be used after the Reset call.

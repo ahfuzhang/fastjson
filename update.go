@@ -51,6 +51,9 @@ func (v *Value) Del(key string) {
 
 // Set sets (key, value) entry in the o.
 //
+// Consider cloning the key with Arena.CloneString() before passing it to this function,
+// if the key points to some big underlying byte slice, so it could be freed up by GC.
+//
 // The value must be unchanged during o lifetime.
 func (o *Object) Set(key string, value *Value) {
 	if o == nil {
@@ -77,6 +80,9 @@ func (o *Object) Set(key string, value *Value) {
 }
 
 // Set sets (key, value) entry in the array or object v.
+//
+// Consider cloning the key with Arena.CloneString() before passing it to this function,
+// if the key points to some big underlying byte slice, so it could be freed up by GC.
 //
 // The value must be unchanged during v lifetime.
 func (v *Value) Set(key string, value *Value) {
