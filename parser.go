@@ -4,17 +4,10 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
-	"sync"
 	"unicode/utf16"
 
 	"github.com/valyala/fastjson/fastfloat"
 )
-
-var Pool = sync.Pool{
-	New: func() any {
-		return &Parser{}
-	},
-}
 
 // Parser parses JSON.
 //
