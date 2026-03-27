@@ -2,11 +2,19 @@ package fastjson
 
 import (
 	"fmt"
-	"github.com/valyala/fastjson/fastfloat"
 	"strconv"
 	"strings"
+	"sync"
 	"unicode/utf16"
+
+	"github.com/valyala/fastjson/fastfloat"
 )
+
+var Pool = sync.Pool{
+	New: func() any {
+		return &Parser{}
+	},
+}
 
 // Parser parses JSON.
 //
@@ -30,6 +38,27 @@ type Parser struct {
 func (p *Parser) Parse(s string) (*Value, error) {
 	s = skipWS(s)
 	p.b = append(p.b[:0], s...)
+	p.c.reset()
+
+	v, tail, err := p.c.parseValue(b2s(p.b), 0)
+	if err != nil {
+		return nil, fmt.Errorf("cannot parse JSON: %s; unparsed tail: %q", err, startEndString(tail))
+	}
+	tail = skipWS(tail)
+	if len(tail) > 0 {
+		return nil, fmt.Errorf("unexpected tail: %q", startEndString(tail))
+	}
+	return v, nil
+}
+
+func (p *Parser) Reset() {
+	p.b = p.b[:0]
+	p.c.reset()
+}
+
+func (p *Parser) ParseNoCopy(s string) (*Value, error) {
+	s = skipWS(s)
+	p.b = s2b(s)
 	p.c.reset()
 
 	v, tail, err := p.c.parseValue(b2s(p.b), 0)
