@@ -15,6 +15,39 @@ func BenchmarkParseUint64(b *testing.B) {
 	}
 }
 
+func BenchmarkParseUint64_AllLen(b *testing.B){
+	for _, s := range []string{"0", "12", "123","1234", "12345",
+		"123456",
+		"1234567",
+		"12345678",
+		"1234567890",
+		"12345678901",
+		"123456789012",
+		"1234567890123",
+		"12345678901234",
+		"123456789012345",
+		"1234567890123456",
+		"12345678901234567",
+		"123456789012345678",
+		"1234567890123456789"} {
+		b.Run("custom_"+s, func(b *testing.B) {
+			b.ReportAllocs()
+			b.SetBytes(int64(len(s)))
+			b.RunParallel(func(pb *testing.PB) {
+				var d int64
+				for pb.Next() {
+					dd, err := ParseInt64(s)
+					if err != nil {
+						panic(fmt.Errorf("unexpected error: %s", err))
+					}
+					d += dd
+				}
+				atomic.AddUint64(&Sink, uint64(d))
+			})
+		})
+	}
+}
+
 func BenchmarkParseUint64BestEffort(b *testing.B) {
 	for _, s := range []string{"0", "12", "12345", "1234567890", "9223372036854775807"} {
 		b.Run(s, func(b *testing.B) {
