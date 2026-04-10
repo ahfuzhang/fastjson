@@ -170,6 +170,12 @@ func BenchmarkParse(b *testing.B) {
 	})
 }
 
+func BenchmarkParseTwitter(b *testing.B) {
+	b.Run("fastjson-get", func(b *testing.B) {
+		benchmarkFastJSONParseGet(b, twitterFixture)
+	})
+}
+
 var (
 	// small, medium and large fixtures are from https://github.com/buger/jsonparser/blob/f04e003e4115787c6272636780bc206e5ffad6c4/benchmark/benchmark.go
 	smallFixture  = getFromFile("testdata/small.json")

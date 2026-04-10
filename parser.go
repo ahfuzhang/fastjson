@@ -453,21 +453,32 @@ var numberBitmap = func() [256 / 8]byte {
 	return bitmap
 }()
 
-func isNumberChar(ch byte) bool {
+func isNumberCharBitmap(ch byte) bool {
 	return numberBitmap[ch/8]&(1<<(ch%8)) != 0
 }
 
-var numberBitmap1 = func() [256]bool {
-	var bitmap [256]bool
-	for _, c := range []byte("0123456789.eE+-") {
-		bitmap[c] = true
+func isNumberCharOld(ch byte) bool {
+	return (ch >= '0' && ch <= '9') || ch == '.' || ch == '-' || ch == 'e' || ch == 'E' || ch == '+'
+}
+
+func isNumberCharOld2(ch byte) bool {
+	if ch >= '0' && ch <= '9'{
+		return true
 	}
-	return bitmap
+	return ch == '.' || ch == '-' || ch == 'e' || ch == 'E' || ch == '+'
+}
+
+var numberSearchTable = func() [256]bool {
+	var table [256]bool
+	for _, c := range []byte("0123456789.eE+-") {
+		table[c] = true
+	}
+	return table
 }()
 
-// func isNumberChar1(ch byte) bool {
-// 	return numberBitmap1[ch] != 0
-// }
+func isNumberChar1(ch byte) bool {
+	return numberSearchTable[ch]
+}
 
 func parseRawNumber(s string) (string, string, error) {
 	// The caller must ensure len(s) > 0
