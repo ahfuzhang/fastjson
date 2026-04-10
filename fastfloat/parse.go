@@ -5,6 +5,7 @@ import (
 	"math"
 	"strconv"
 	"strings"
+	"unsafe"
 )
 
 // ParseUint64BestEffort parses uint64 number s.
@@ -18,31 +19,300 @@ func ParseUint64BestEffort(s string) uint64 {
 		return 0
 	}
 	i := uint(0)
-	d := uint64(0)
-	j := i
-	for i < uint(len(s)) {
-		if s[i] >= '0' && s[i] <= '9' {
-			d = d*10 + uint64(s[i]-'0')
-			i++
-			if i > 18 {
-				// The integer part may be out of range for uint64.
-				// Fall back to slow parsing.
-				dd, err := strconv.ParseUint(s, 10, 64)
-				if err != nil {
-					return 0
-				}
-				return dd
-			}
-			continue
+	for ; i < uint(len(s)); i++ {
+		if !(s[i] >= '0' && s[i] <= '9') {
+			break
 		}
-		break
 	}
-	if i <= j {
-		return 0
-	}
+	// if i == 0 {
+	// 	return 0
+	// }
 	if i < uint(len(s)) {
 		// Unparsed tail left.
 		return 0
+	}
+	// 使用 jump table 进行解析
+	d := uint64(0)
+	var ss *[17]byte = (*[17]byte)(unsafe.Pointer(unsafe.StringData(s)))
+	switch i {
+	case 0:
+		return 0
+	case 1:
+		d = uint64(ss[0] - '0')
+	case 2:
+		d = uint64(ss[0]-'0')*10 + uint64(ss[1]-'0')
+	case 3:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+	case 4:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+	case 5:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+		d *= 10
+		d += uint64(ss[4] - '0')
+	case 6:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+		d *= 10
+		d += uint64(ss[4] - '0')
+		d *= 10
+		d += uint64(ss[5] - '0')
+	case 7:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+		d *= 10
+		d += uint64(ss[4] - '0')
+		d *= 10
+		d += uint64(ss[5] - '0')
+		d *= 10
+		d += uint64(ss[6] - '0')
+	case 8:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+		d *= 10
+		d += uint64(ss[4] - '0')
+		d *= 10
+		d += uint64(ss[5] - '0')
+		d *= 10
+		d += uint64(ss[6] - '0')
+		d *= 10
+		d += uint64(ss[7] - '0')
+	case 9:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+		d *= 10
+		d += uint64(ss[4] - '0')
+		d *= 10
+		d += uint64(ss[5] - '0')
+		d *= 10
+		d += uint64(ss[6] - '0')
+		d *= 10
+		d += uint64(ss[7] - '0')
+		d *= 10
+		d += uint64(ss[8] - '0')
+	case 10:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+		d *= 10
+		d += uint64(ss[4] - '0')
+		d *= 10
+		d += uint64(ss[5] - '0')
+		d *= 10
+		d += uint64(ss[6] - '0')
+		d *= 10
+		d += uint64(ss[7] - '0')
+		d *= 10
+		d += uint64(ss[8] - '0')
+		d *= 10
+		d += uint64(ss[9] - '0')
+	case 11:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+		d *= 10
+		d += uint64(ss[4] - '0')
+		d *= 10
+		d += uint64(ss[5] - '0')
+		d *= 10
+		d += uint64(ss[6] - '0')
+		d *= 10
+		d += uint64(ss[7] - '0')
+		d *= 10
+		d += uint64(ss[8] - '0')
+		d *= 10
+		d += uint64(ss[9] - '0')
+		d *= 10
+		d += uint64(ss[10] - '0')
+	case 12:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+		d *= 10
+		d += uint64(ss[4] - '0')
+		d *= 10
+		d += uint64(ss[5] - '0')
+		d *= 10
+		d += uint64(ss[6] - '0')
+		d *= 10
+		d += uint64(ss[7] - '0')
+		d *= 10
+		d += uint64(ss[8] - '0')
+		d *= 10
+		d += uint64(ss[9] - '0')
+		d *= 10
+		d += uint64(ss[10] - '0')
+		d *= 10
+		d += uint64(ss[11] - '0')
+	case 13:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+		d *= 10
+		d += uint64(ss[4] - '0')
+		d *= 10
+		d += uint64(ss[5] - '0')
+		d *= 10
+		d += uint64(ss[6] - '0')
+		d *= 10
+		d += uint64(ss[7] - '0')
+		d *= 10
+		d += uint64(ss[8] - '0')
+		d *= 10
+		d += uint64(ss[9] - '0')
+		d *= 10
+		d += uint64(ss[10] - '0')
+		d *= 10
+		d += uint64(ss[11] - '0')
+		d *= 10
+		d += uint64(ss[12] - '0')
+	case 14:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+		d *= 10
+		d += uint64(ss[4] - '0')
+		d *= 10
+		d += uint64(ss[5] - '0')
+		d *= 10
+		d += uint64(ss[6] - '0')
+		d *= 10
+		d += uint64(ss[7] - '0')
+		d *= 10
+		d += uint64(ss[8] - '0')
+		d *= 10
+		d += uint64(ss[9] - '0')
+		d *= 10
+		d += uint64(ss[10] - '0')
+		d *= 10
+		d += uint64(ss[11] - '0')
+		d *= 10
+		d += uint64(ss[12] - '0')
+		d *= 10
+		d += uint64(ss[13] - '0')
+	case 15:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+		d *= 10
+		d += uint64(ss[4] - '0')
+		d *= 10
+		d += uint64(ss[5] - '0')
+		d *= 10
+		d += uint64(ss[6] - '0')
+		d *= 10
+		d += uint64(ss[7] - '0')
+		d *= 10
+		d += uint64(ss[8] - '0')
+		d *= 10
+		d += uint64(ss[9] - '0')
+		d *= 10
+		d += uint64(ss[10] - '0')
+		d *= 10
+		d += uint64(ss[11] - '0')
+		d *= 10
+		d += uint64(ss[12] - '0')
+		d *= 10
+		d += uint64(ss[13] - '0')
+		d *= 10
+		d += uint64(ss[14] - '0')
+	case 16:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+		d *= 10
+		d += uint64(ss[4] - '0')
+		d *= 10
+		d += uint64(ss[5] - '0')
+		d *= 10
+		d += uint64(ss[6] - '0')
+		d *= 10
+		d += uint64(ss[7] - '0')
+		d *= 10
+		d += uint64(ss[8] - '0')
+		d *= 10
+		d += uint64(ss[9] - '0')
+		d *= 10
+		d += uint64(ss[10] - '0')
+		d *= 10
+		d += uint64(ss[11] - '0')
+		d *= 10
+		d += uint64(ss[12] - '0')
+		d *= 10
+		d += uint64(ss[13] - '0')
+		d *= 10
+		d += uint64(ss[14] - '0')
+		d *= 10
+		d += uint64(ss[15] - '0')
+	default:
+		dd, err := strconv.ParseUint(s, 10, 64)
+		if err != nil {
+			return 0
+		}
+		return dd
 	}
 	return d
 }
@@ -57,31 +327,306 @@ func ParseUint64(s string) (uint64, error) {
 		return 0, fmt.Errorf("cannot parse uint64 from empty string")
 	}
 	i := uint(0)
-	d := uint64(0)
-	j := i
-	for i < uint(len(s)) {
-		if s[i] >= '0' && s[i] <= '9' {
-			d = d*10 + uint64(s[i]-'0')
-			i++
-			if i > 18 {
-				// The integer part may be out of range for uint64.
-				// Fall back to slow parsing.
-				dd, err := strconv.ParseUint(s, 10, 64)
-				if err != nil {
-					return 0, err
-				}
-				return dd, nil
-			}
-			continue
+	for ; i < uint(len(s)); i++ {
+		if !(s[i] >= '0' && s[i] <= '9') {
+			break
 		}
-		break
 	}
-	if i <= j {
+	// 找到结束位置
+	if i == 0 {
 		return 0, fmt.Errorf("cannot parse uint64 from %q", s)
 	}
 	if i < uint(len(s)) {
 		// Unparsed tail left.
 		return 0, fmt.Errorf("unparsed tail left after parsing uint64 from %q: %q", s, s[i:])
+	}
+	// if i > 18 {
+
+	// }
+	// 使用 jump table 进行解析
+	d := uint64(0)
+	var ss *[17]byte = (*[17]byte)(unsafe.Pointer(unsafe.StringData(s)))
+	switch i {
+	// case 0:
+	// 	return 0, fmt.Errorf("cannot parse uint64 from %q", s)
+	case 1:
+		d = uint64(ss[0] - '0')
+	case 2:
+		d = uint64(ss[0]-'0')*10 + uint64(ss[1]-'0')
+	case 3:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+	case 4:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+	case 5:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+		d *= 10
+		d += uint64(ss[4] - '0')
+	case 6:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+		d *= 10
+		d += uint64(ss[4] - '0')
+		d *= 10
+		d += uint64(ss[5] - '0')
+	case 7:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+		d *= 10
+		d += uint64(ss[4] - '0')
+		d *= 10
+		d += uint64(ss[5] - '0')
+		d *= 10
+		d += uint64(ss[6] - '0')
+	case 8:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+		d *= 10
+		d += uint64(ss[4] - '0')
+		d *= 10
+		d += uint64(ss[5] - '0')
+		d *= 10
+		d += uint64(ss[6] - '0')
+		d *= 10
+		d += uint64(ss[7] - '0')
+	case 9:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+		d *= 10
+		d += uint64(ss[4] - '0')
+		d *= 10
+		d += uint64(ss[5] - '0')
+		d *= 10
+		d += uint64(ss[6] - '0')
+		d *= 10
+		d += uint64(ss[7] - '0')
+		d *= 10
+		d += uint64(ss[8] - '0')
+	case 10:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+		d *= 10
+		d += uint64(ss[4] - '0')
+		d *= 10
+		d += uint64(ss[5] - '0')
+		d *= 10
+		d += uint64(ss[6] - '0')
+		d *= 10
+		d += uint64(ss[7] - '0')
+		d *= 10
+		d += uint64(ss[8] - '0')
+		d *= 10
+		d += uint64(ss[9] - '0')
+	case 11:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+		d *= 10
+		d += uint64(ss[4] - '0')
+		d *= 10
+		d += uint64(ss[5] - '0')
+		d *= 10
+		d += uint64(ss[6] - '0')
+		d *= 10
+		d += uint64(ss[7] - '0')
+		d *= 10
+		d += uint64(ss[8] - '0')
+		d *= 10
+		d += uint64(ss[9] - '0')
+		d *= 10
+		d += uint64(ss[10] - '0')
+	case 12:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+		d *= 10
+		d += uint64(ss[4] - '0')
+		d *= 10
+		d += uint64(ss[5] - '0')
+		d *= 10
+		d += uint64(ss[6] - '0')
+		d *= 10
+		d += uint64(ss[7] - '0')
+		d *= 10
+		d += uint64(ss[8] - '0')
+		d *= 10
+		d += uint64(ss[9] - '0')
+		d *= 10
+		d += uint64(ss[10] - '0')
+		d *= 10
+		d += uint64(ss[11] - '0')
+	case 13:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+		d *= 10
+		d += uint64(ss[4] - '0')
+		d *= 10
+		d += uint64(ss[5] - '0')
+		d *= 10
+		d += uint64(ss[6] - '0')
+		d *= 10
+		d += uint64(ss[7] - '0')
+		d *= 10
+		d += uint64(ss[8] - '0')
+		d *= 10
+		d += uint64(ss[9] - '0')
+		d *= 10
+		d += uint64(ss[10] - '0')
+		d *= 10
+		d += uint64(ss[11] - '0')
+		d *= 10
+		d += uint64(ss[12] - '0')
+	case 14:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+		d *= 10
+		d += uint64(ss[4] - '0')
+		d *= 10
+		d += uint64(ss[5] - '0')
+		d *= 10
+		d += uint64(ss[6] - '0')
+		d *= 10
+		d += uint64(ss[7] - '0')
+		d *= 10
+		d += uint64(ss[8] - '0')
+		d *= 10
+		d += uint64(ss[9] - '0')
+		d *= 10
+		d += uint64(ss[10] - '0')
+		d *= 10
+		d += uint64(ss[11] - '0')
+		d *= 10
+		d += uint64(ss[12] - '0')
+		d *= 10
+		d += uint64(ss[13] - '0')
+	case 15:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+		d *= 10
+		d += uint64(ss[4] - '0')
+		d *= 10
+		d += uint64(ss[5] - '0')
+		d *= 10
+		d += uint64(ss[6] - '0')
+		d *= 10
+		d += uint64(ss[7] - '0')
+		d *= 10
+		d += uint64(ss[8] - '0')
+		d *= 10
+		d += uint64(ss[9] - '0')
+		d *= 10
+		d += uint64(ss[10] - '0')
+		d *= 10
+		d += uint64(ss[11] - '0')
+		d *= 10
+		d += uint64(ss[12] - '0')
+		d *= 10
+		d += uint64(ss[13] - '0')
+		d *= 10
+		d += uint64(ss[14] - '0')
+	case 16:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+		d *= 10
+		d += uint64(ss[4] - '0')
+		d *= 10
+		d += uint64(ss[5] - '0')
+		d *= 10
+		d += uint64(ss[6] - '0')
+		d *= 10
+		d += uint64(ss[7] - '0')
+		d *= 10
+		d += uint64(ss[8] - '0')
+		d *= 10
+		d += uint64(ss[9] - '0')
+		d *= 10
+		d += uint64(ss[10] - '0')
+		d *= 10
+		d += uint64(ss[11] - '0')
+		d *= 10
+		d += uint64(ss[12] - '0')
+		d *= 10
+		d += uint64(ss[13] - '0')
+		d *= 10
+		d += uint64(ss[14] - '0')
+		d *= 10
+		d += uint64(ss[15] - '0')
+	default:
+		// The integer part may be out of range for uint64.
+		// Fall back to slow parsing.
+		dd, err := strconv.ParseUint(s, 10, 64)
+		if err != nil {
+			return 0, err
+		}
+		return dd, nil
 	}
 	return d, nil
 }
