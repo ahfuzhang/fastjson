@@ -24,26 +24,23 @@ func ParseUint64BestEffort(s string) uint64 {
 			break
 		}
 	}
-	// if i == 0 {
-	// 	return 0
-	// }
 	if i < uint(len(s)) {
 		// Unparsed tail left.
 		return 0
 	}
-	// 使用 jump table 进行解析
-	d := uint64(0)
-	var ss *[17]byte = (*[17]byte)(unsafe.Pointer(unsafe.StringData(s)))
+	var ss *[18]byte = (*[18]byte)(unsafe.Pointer(unsafe.StringData(s)))  // to avoid bound check
+	// use jump table and loop unrolling
+	var d uint64
 	switch i {
 	case 0:
-		return 0
+		d = 0
 	case 1:
 		d = uint64(ss[0] - '0')
 	case 2:
 		d = uint64(ss[0]-'0')*10 + uint64(ss[1]-'0')
 	case 3:
 		d = uint64(ss[0] - '0')
-		d *= 10
+		d *= 10  // n*10 will be optimized by the compiler to (n<<3) + (n<<1)
 		d += uint64(ss[1] - '0')
 		d *= 10
 		d += uint64(ss[2] - '0')
@@ -307,6 +304,76 @@ func ParseUint64BestEffort(s string) uint64 {
 		d += uint64(ss[14] - '0')
 		d *= 10
 		d += uint64(ss[15] - '0')
+	case 17:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+		d *= 10
+		d += uint64(ss[4] - '0')
+		d *= 10
+		d += uint64(ss[5] - '0')
+		d *= 10
+		d += uint64(ss[6] - '0')
+		d *= 10
+		d += uint64(ss[7] - '0')
+		d *= 10
+		d += uint64(ss[8] - '0')
+		d *= 10
+		d += uint64(ss[9] - '0')
+		d *= 10
+		d += uint64(ss[10] - '0')
+		d *= 10
+		d += uint64(ss[11] - '0')
+		d *= 10
+		d += uint64(ss[12] - '0')
+		d *= 10
+		d += uint64(ss[13] - '0')
+		d *= 10
+		d += uint64(ss[14] - '0')
+		d *= 10
+		d += uint64(ss[15] - '0')
+		d *= 10
+		d += uint64(ss[16] - '0')
+	case 18:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+		d *= 10
+		d += uint64(ss[4] - '0')
+		d *= 10
+		d += uint64(ss[5] - '0')
+		d *= 10
+		d += uint64(ss[6] - '0')
+		d *= 10
+		d += uint64(ss[7] - '0')
+		d *= 10
+		d += uint64(ss[8] - '0')
+		d *= 10
+		d += uint64(ss[9] - '0')
+		d *= 10
+		d += uint64(ss[10] - '0')
+		d *= 10
+		d += uint64(ss[11] - '0')
+		d *= 10
+		d += uint64(ss[12] - '0')
+		d *= 10
+		d += uint64(ss[13] - '0')
+		d *= 10
+		d += uint64(ss[14] - '0')
+		d *= 10
+		d += uint64(ss[15] - '0')
+		d *= 10
+		d += uint64(ss[16] - '0')
+		d *= 10
+		d += uint64(ss[17] - '0')
 	default:
 		dd, err := strconv.ParseUint(s, 10, 64)
 		if err != nil {
@@ -332,7 +399,7 @@ func ParseUint64(s string) (uint64, error) {
 			break
 		}
 	}
-	// 找到结束位置
+	// find end location
 	if i == 0 {
 		return 0, fmt.Errorf("cannot parse uint64 from %q", s)
 	}
@@ -340,22 +407,19 @@ func ParseUint64(s string) (uint64, error) {
 		// Unparsed tail left.
 		return 0, fmt.Errorf("unparsed tail left after parsing uint64 from %q: %q", s, s[i:])
 	}
-	// if i > 18 {
-
-	// }
-	// 使用 jump table 进行解析
-	d := uint64(0)
-	var ss *[17]byte = (*[17]byte)(unsafe.Pointer(unsafe.StringData(s)))
+	var ss *[18]byte = (*[18]byte)(unsafe.Pointer(unsafe.StringData(s)))
+	// use jump table and loop unrolling
+	var d uint64
 	switch i {
-	// case 0:
-	// 	return 0, fmt.Errorf("cannot parse uint64 from %q", s)
+	case 0:
+		d = 0
 	case 1:
 		d = uint64(ss[0] - '0')
 	case 2:
 		d = uint64(ss[0]-'0')*10 + uint64(ss[1]-'0')
 	case 3:
 		d = uint64(ss[0] - '0')
-		d *= 10
+		d *= 10  // n*10 will be optimized by the compiler to (n<<3) + (n<<1)
 		d += uint64(ss[1] - '0')
 		d *= 10
 		d += uint64(ss[2] - '0')
@@ -619,12 +683,80 @@ func ParseUint64(s string) (uint64, error) {
 		d += uint64(ss[14] - '0')
 		d *= 10
 		d += uint64(ss[15] - '0')
+	case 17:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+		d *= 10
+		d += uint64(ss[4] - '0')
+		d *= 10
+		d += uint64(ss[5] - '0')
+		d *= 10
+		d += uint64(ss[6] - '0')
+		d *= 10
+		d += uint64(ss[7] - '0')
+		d *= 10
+		d += uint64(ss[8] - '0')
+		d *= 10
+		d += uint64(ss[9] - '0')
+		d *= 10
+		d += uint64(ss[10] - '0')
+		d *= 10
+		d += uint64(ss[11] - '0')
+		d *= 10
+		d += uint64(ss[12] - '0')
+		d *= 10
+		d += uint64(ss[13] - '0')
+		d *= 10
+		d += uint64(ss[14] - '0')
+		d *= 10
+		d += uint64(ss[15] - '0')
+		d *= 10
+		d += uint64(ss[16] - '0')
+	case 18:
+		d = uint64(ss[0] - '0')
+		d *= 10
+		d += uint64(ss[1] - '0')
+		d *= 10
+		d += uint64(ss[2] - '0')
+		d *= 10
+		d += uint64(ss[3] - '0')
+		d *= 10
+		d += uint64(ss[4] - '0')
+		d *= 10
+		d += uint64(ss[5] - '0')
+		d *= 10
+		d += uint64(ss[6] - '0')
+		d *= 10
+		d += uint64(ss[7] - '0')
+		d *= 10
+		d += uint64(ss[8] - '0')
+		d *= 10
+		d += uint64(ss[9] - '0')
+		d *= 10
+		d += uint64(ss[10] - '0')
+		d *= 10
+		d += uint64(ss[11] - '0')
+		d *= 10
+		d += uint64(ss[12] - '0')
+		d *= 10
+		d += uint64(ss[13] - '0')
+		d *= 10
+		d += uint64(ss[14] - '0')
+		d *= 10
+		d += uint64(ss[15] - '0')
+		d *= 10
+		d += uint64(ss[16] - '0')
+		d *= 10
+		d += uint64(ss[17] - '0')
 	default:
-		// The integer part may be out of range for uint64.
-		// Fall back to slow parsing.
 		dd, err := strconv.ParseUint(s, 10, 64)
 		if err != nil {
-			return 0, err
+			return 0,err
 		}
 		return dd, nil
 	}
