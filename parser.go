@@ -103,24 +103,20 @@ func skipWS(s string) string {
 	return skipWSSlow(s)
 }
 
-var wsTable = func() [256]byte {
-	var table [256]byte
+var wsSearchTable = func() [256]bool {
+	var table [256]bool
 	for _, c := range []byte{0x20, 0x0A, 0x09, 0x0D} {
-		table[c] = 1
+		table[c] = true
 	}
 	return table
 }()
 
-func isWSBySearchTable(ch byte) bool {
-	return wsTable[ch] != 0
-}
-
 func skipWSSlow(s string) string {
-	if len(s) == 0 || !isWSBySearchTable(s[0]) {
+	if len(s) == 0 || !wsSearchTable[s[0]] {
 		return s
 	}
 	for i := 1; i < len(s); i++ {
-		if !isWSBySearchTable(s[i]) {
+		if !wsSearchTable[s[i]] {
 			return s[i:]
 		}
 	}
