@@ -445,13 +445,37 @@ func parseRawString(s string) (string, string, error) {
 	}
 }
 
+var numberBitmap = func() [256 / 8]byte {
+	var bitmap [256 / 8]byte
+	for _, c := range []byte("0123456789.eE+-") {
+		bitmap[c/8] |= 1 << (c % 8)
+	}
+	return bitmap
+}()
+
+func isNumberChar(ch byte) bool {
+	return numberBitmap[ch/8]&(1<<(ch%8)) != 0
+}
+
+var numberBitmap1 = func() [256]bool {
+	var bitmap [256]bool
+	for _, c := range []byte("0123456789.eE+-") {
+		bitmap[c] = true
+	}
+	return bitmap
+}()
+
+// func isNumberChar1(ch byte) bool {
+// 	return numberBitmap1[ch] != 0
+// }
+
 func parseRawNumber(s string) (string, string, error) {
 	// The caller must ensure len(s) > 0
 
 	// Find the end of the number.
 	for i := range len(s) {
 		ch := s[i]
-		if (ch >= '0' && ch <= '9') || ch == '.' || ch == '-' || ch == 'e' || ch == 'E' || ch == '+' {
+		if isNumberChar(ch) {
 			continue
 		}
 		if i == 0 || i == 1 && (s[0] == '-' || s[0] == '+') {
