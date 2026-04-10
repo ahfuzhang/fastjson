@@ -103,12 +103,44 @@ func skipWS(s string) string {
 	return skipWSSlow(s)
 }
 
+var wsChars = []byte{0x20, 0x0A, 0x09, 0x0D}
+
+func makeBitmap(chars []byte) [256 / 8]byte {
+	var bitmap [256 / 8]byte
+	for _, c := range chars {
+		bitmap[c/8] |= 1 << (c % 8)
+	}
+	return bitmap
+}
+
+var wsBitmap = makeBitmap(wsChars)
+
+func isWS(ch byte) bool {
+	return wsBitmap[ch/8]&(1<<(ch%8)) != 0
+}
+
+var wsTable = func() [256]byte {
+	var table [256]byte
+	for _, c := range wsChars {
+		table[c] = 1
+	}
+	return table
+}()
+
+func isWSBySearchTable(ch byte) bool {
+	return wsTable[ch] != 0
+}
+
+func isWSByCompare(ch byte) bool {
+	return ch == 0x20 || ch == 0x0A || ch == 0x09 || ch == 0x0D
+}
+
 func skipWSSlow(s string) string {
-	if len(s) == 0 || s[0] != 0x20 && s[0] != 0x0A && s[0] != 0x09 && s[0] != 0x0D {
+	if len(s) == 0 || !isWSBySearchTable(s[0]) {
 		return s
 	}
 	for i := 1; i < len(s); i++ {
-		if s[i] != 0x20 && s[i] != 0x0A && s[i] != 0x09 && s[i] != 0x0D {
+		if !isWSBySearchTable(s[i]) {
 			return s[i:]
 		}
 	}
@@ -131,22 +163,21 @@ func (c *cache) parseValue(s string, depth int) (*Value, string, error) {
 	if depth > MaxDepth {
 		return nil, s, fmt.Errorf("too big depth for the nested JSON; it exceeds %d", MaxDepth)
 	}
-
-	if s[0] == '{' {
+	// 尝试使用 jump table
+	switch s[0] {
+	case '{':
 		v, tail, err := c.parseObject(s[1:], depth)
 		if err != nil {
 			return nil, tail, fmt.Errorf("cannot parse object: %s", err)
 		}
 		return v, tail, nil
-	}
-	if s[0] == '[' {
+	case '[':
 		v, tail, err := c.parseArray(s[1:], depth)
 		if err != nil {
 			return nil, tail, fmt.Errorf("cannot parse array: %s", err)
 		}
 		return v, tail, nil
-	}
-	if s[0] == '"' {
+	case '"':
 		ss, tail, err := parseRawString(s[1:])
 		if err != nil {
 			return nil, tail, fmt.Errorf("cannot parse string: %s", err)
@@ -155,20 +186,17 @@ func (c *cache) parseValue(s string, depth int) (*Value, string, error) {
 		v.t = typeRawString
 		v.s = ss
 		return v, tail, nil
-	}
-	if s[0] == 't' {
+	case 't':
 		if len(s) < len("true") || s[:len("true")] != "true" {
 			return nil, s, fmt.Errorf("unexpected value found: %q", s)
 		}
 		return valueTrue, s[len("true"):], nil
-	}
-	if s[0] == 'f' {
+	case 'f':
 		if len(s) < len("false") || s[:len("false")] != "false" {
 			return nil, s, fmt.Errorf("unexpected value found: %q", s)
 		}
 		return valueFalse, s[len("false"):], nil
-	}
-	if s[0] == 'n' {
+	case 'n':
 		if len(s) < len("null") || s[:len("null")] != "null" {
 			// Try parsing NaN
 			if len(s) >= 3 && strings.EqualFold(s[:3], "nan") {
@@ -180,16 +208,78 @@ func (c *cache) parseValue(s string, depth int) (*Value, string, error) {
 			return nil, s, fmt.Errorf("unexpected value found: %q", s)
 		}
 		return valueNull, s[len("null"):], nil
+	case ' ':
+		panic("to make complier happy, this case will never be hit, since skipWS is called before parseValue")
+	case '\t':
+		panic("to make complier happy, this case will never be hit, since skipWS is called before parseValue 2")
+	default:
+		ns, tail, err := parseRawNumber(s)
+		if err != nil {
+			return nil, tail, fmt.Errorf("cannot parse number: %s", err)
+		}
+		v := c.getValue()
+		v.t = TypeNumber
+		v.s = ns
+		return v, tail, nil
 	}
+	// if s[0] == '{' {
+	// 	v, tail, err := c.parseObject(s[1:], depth)
+	// 	if err != nil {
+	// 		return nil, tail, fmt.Errorf("cannot parse object: %s", err)
+	// 	}
+	// 	return v, tail, nil
+	// }
+	// if s[0] == '[' {
+	// 	v, tail, err := c.parseArray(s[1:], depth)
+	// 	if err != nil {
+	// 		return nil, tail, fmt.Errorf("cannot parse array: %s", err)
+	// 	}
+	// 	return v, tail, nil
+	// }
+	// if s[0] == '"' {
+	// 	ss, tail, err := parseRawString(s[1:])
+	// 	if err != nil {
+	// 		return nil, tail, fmt.Errorf("cannot parse string: %s", err)
+	// 	}
+	// 	v := c.getValue()
+	// 	v.t = typeRawString
+	// 	v.s = ss
+	// 	return v, tail, nil
+	// }
+	// if s[0] == 't' {
+	// 	if len(s) < len("true") || s[:len("true")] != "true" {
+	// 		return nil, s, fmt.Errorf("unexpected value found: %q", s)
+	// 	}
+	// 	return valueTrue, s[len("true"):], nil
+	// }
+	// if s[0] == 'f' {
+	// 	if len(s) < len("false") || s[:len("false")] != "false" {
+	// 		return nil, s, fmt.Errorf("unexpected value found: %q", s)
+	// 	}
+	// 	return valueFalse, s[len("false"):], nil
+	// }
+	// if s[0] == 'n' {
+	// 	if len(s) < len("null") || s[:len("null")] != "null" {
+	// 		// Try parsing NaN
+	// 		if len(s) >= 3 && strings.EqualFold(s[:3], "nan") {
+	// 			v := c.getValue()
+	// 			v.t = TypeNumber
+	// 			v.s = s[:3]
+	// 			return v, s[3:], nil
+	// 		}
+	// 		return nil, s, fmt.Errorf("unexpected value found: %q", s)
+	// 	}
+	// 	return valueNull, s[len("null"):], nil
+	// }
 
-	ns, tail, err := parseRawNumber(s)
-	if err != nil {
-		return nil, tail, fmt.Errorf("cannot parse number: %s", err)
-	}
-	v := c.getValue()
-	v.t = TypeNumber
-	v.s = ns
-	return v, tail, nil
+	// ns, tail, err := parseRawNumber(s)
+	// if err != nil {
+	// 	return nil, tail, fmt.Errorf("cannot parse number: %s", err)
+	// }
+	// v := c.getValue()
+	// v.t = TypeNumber
+	// v.s = ns
+	// return v, tail, nil
 }
 
 func (c *cache) parseArray(s string, depth int) (*Value, string, error) {
@@ -445,13 +535,25 @@ func parseRawString(s string) (string, string, error) {
 	}
 }
 
+var numberBitmap = func() [256 / 8]byte {
+	var bitmap [256 / 8]byte
+	for _, c := range []byte("0123456789.eE+-") {
+		bitmap[c/8] |= 1 << (c % 8)
+	}
+	return bitmap
+}()
+
+func isNumberChar(ch byte) bool {
+	return numberBitmap[ch/8]&(1<<(ch%8)) != 0
+}
+
 func parseRawNumber(s string) (string, string, error) {
 	// The caller must ensure len(s) > 0
 
 	// Find the end of the number.
 	for i := range len(s) {
 		ch := s[i]
-		if (ch >= '0' && ch <= '9') || ch == '.' || ch == '-' || ch == 'e' || ch == 'E' || ch == '+' {
+		if isNumberChar(ch) {
 			continue
 		}
 		if i == 0 || i == 1 && (s[0] == '-' || s[0] == '+') {

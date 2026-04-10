@@ -1,0 +1,264 @@
+Running tool: /opt/homebrew/bin/go test -test.fullpath=true -benchmem -run=^$ -bench ^BenchmarkParseUint64$ github.com/valyala/fastjson/fastfloat
+
+goos: darwin
+goarch: arm64
+pkg: github.com/valyala/fastjson/fastfloat
+cpu: Apple M2
+=== RUN   BenchmarkParseUint64
+BenchmarkParseUint64
+=== RUN   BenchmarkParseUint64/0
+BenchmarkParseUint64/0
+=== RUN   BenchmarkParseUint64/0/std
+BenchmarkParseUint64/0/std
+BenchmarkParseUint64/0/std-8            1000000000               0.9937 ns/op   1006.35 MB/s           0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64/0/custom
+BenchmarkParseUint64/0/custom
+BenchmarkParseUint64/0/custom-8         1000000000               0.5297 ns/op   1888.01 MB/s           0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64/12
+BenchmarkParseUint64/12
+=== RUN   BenchmarkParseUint64/12/std
+BenchmarkParseUint64/12/std
+BenchmarkParseUint64/12/std-8           890037973                1.230 ns/op    1625.55 MB/s           0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64/12/custom
+BenchmarkParseUint64/12/custom
+BenchmarkParseUint64/12/custom-8        1000000000               0.6521 ns/op   3067.13 MB/s           0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64/12345
+BenchmarkParseUint64/12345
+=== RUN   BenchmarkParseUint64/12345/std
+BenchmarkParseUint64/12345/std
+BenchmarkParseUint64/12345/std-8        621565742                1.836 ns/op    2723.22 MB/s           0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64/12345/custom
+BenchmarkParseUint64/12345/custom
+BenchmarkParseUint64/12345/custom-8
+1000000000               0.9401 ns/op   5318.85 MB/s           0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64/1234567890
+BenchmarkParseUint64/1234567890
+=== RUN   BenchmarkParseUint64/1234567890/std
+BenchmarkParseUint64/1234567890/std
+BenchmarkParseUint64/1234567890/std-8           395048234                2.890 ns/op    3460.61 MB/s           0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64/1234567890/custom
+BenchmarkParseUint64/1234567890/custom
+BenchmarkParseUint64/1234567890/custom-8        742422648                1.546 ns/op    6469.47 MB/s           0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64/9223372036854775807
+BenchmarkParseUint64/9223372036854775807
+=== RUN   BenchmarkParseUint64/9223372036854775807/std
+BenchmarkParseUint64/9223372036854775807/std
+BenchmarkParseUint64/9223372036854775807/std-8          238552917                5.079 ns/op    3740.89 MB/s           0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64/9223372036854775807/custom
+BenchmarkParseUint64/9223372036854775807/custom
+BenchmarkParseUint64/9223372036854775807/custom-8       187283575                6.255 ns/op    3037.60 MB/s           0 B/op          0 allocs/op
+PASS
+ok      github.com/valyala/fastjson/fastfloat   12.512s
+
+=====================================
+原版
+Running tool: /opt/homebrew/bin/go test -test.fullpath=true -benchmem -run=^$ -bench ^BenchmarkParseUint64$ github.com/valyala/fastjson/fastfloat
+
+goos: darwin
+goarch: arm64
+pkg: github.com/valyala/fastjson/fastfloat
+cpu: Apple M2
+=== RUN   BenchmarkParseUint64
+BenchmarkParseUint64
+=== RUN   BenchmarkParseUint64/0
+BenchmarkParseUint64/0
+=== RUN   BenchmarkParseUint64/0/std
+BenchmarkParseUint64/0/std
+BenchmarkParseUint64/0/std-8            1000000000               0.9935 ns/op   1006.52 MB/s           0 B/op           0 allocs/op
+=== RUN   BenchmarkParseUint64/0/custom
+BenchmarkParseUint64/0/custom
+BenchmarkParseUint64/0/custom-8         1000000000               0.4948 ns/op   2021.16 MB/s           0 B/op           0 allocs/op
+=== RUN   BenchmarkParseUint64/12
+BenchmarkParseUint64/12
+=== RUN   BenchmarkParseUint64/12/std
+BenchmarkParseUint64/12/std
+BenchmarkParseUint64/12/std-8           953940568                1.277 ns/op    1566.77 MB/s           0 B/op           0 allocs/op
+=== RUN   BenchmarkParseUint64/12/custom
+BenchmarkParseUint64/12/custom
+BenchmarkParseUint64/12/custom-8        1000000000               0.7073 ns/op   2827.55 MB/s           0 B/op           0 allocs/op
+=== RUN   BenchmarkParseUint64/12345
+BenchmarkParseUint64/12345
+=== RUN   BenchmarkParseUint64/12345/std
+BenchmarkParseUint64/12345/std
+BenchmarkParseUint64/12345/std-8        619372021                1.898 ns/op    2634.31 MB/s           0 B/op           0 allocs/op
+=== RUN   BenchmarkParseUint64/12345/custom
+BenchmarkParseUint64/12345/custom
+BenchmarkParseUint64/12345/custom-8     944316474                1.257 ns/op    3977.36 MB/s           0 B/op           0 allocs/op
+=== RUN   BenchmarkParseUint64/1234567890
+BenchmarkParseUint64/1234567890
+=== RUN   BenchmarkParseUint64/1234567890/std
+BenchmarkParseUint64/1234567890/std
+BenchmarkParseUint64/1234567890/std-8           385532208                2.985 ns/op    3349.79 MB/s           0 B/op           0 allocs/op
+=== RUN   BenchmarkParseUint64/1234567890/custom
+BenchmarkParseUint64/1234567890/custom
+BenchmarkParseUint64/1234567890/custom-8        647135313                1.865 ns/op    5362.31 MB/s           0 B/op           0 allocs/op
+=== RUN   BenchmarkParseUint64/9223372036854775807
+BenchmarkParseUint64/9223372036854775807
+=== RUN   BenchmarkParseUint64/9223372036854775807/std
+BenchmarkParseUint64/9223372036854775807/std
+BenchmarkParseUint64/9223372036854775807/std-8          242682919                5.014 ns/op    3789.12 MB/s            0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64/9223372036854775807/custom
+BenchmarkParseUint64/9223372036854775807/custom
+BenchmarkParseUint64/9223372036854775807/custom-8       159348890                7.647 ns/op    2484.53 MB/s            0 B/op          0 allocs/op
+PASS
+ok      github.com/valyala/fastjson/fastfloat   13.546s
+
+============================
+Running tool: /opt/homebrew/bin/go test -test.fullpath=true -benchmem -run=^$ -bench ^BenchmarkParseUint64$ github.com/valyala/fastjson/fastfloat
+
+goos: darwin
+goarch: arm64
+pkg: github.com/valyala/fastjson/fastfloat
+cpu: Apple M2
+=== RUN   BenchmarkParseUint64
+BenchmarkParseUint64
+=== RUN   BenchmarkParseUint64/0
+BenchmarkParseUint64/0
+=== RUN   BenchmarkParseUint64/0/std
+BenchmarkParseUint64/0/std
+BenchmarkParseUint64/0/std-8            1000000000               0.9641 ns/op   1037.24 MB/s           0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64/0/custom
+BenchmarkParseUint64/0/custom
+BenchmarkParseUint64/0/custom-8         1000000000               0.5446 ns/op   1836.15 MB/s           0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64/12
+BenchmarkParseUint64/12
+=== RUN   BenchmarkParseUint64/12/std
+BenchmarkParseUint64/12/std
+BenchmarkParseUint64/12/std-8           1000000000               1.259 ns/op    1588.84 MB/s           0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64/12/custom
+BenchmarkParseUint64/12/custom
+BenchmarkParseUint64/12/custom-8        1000000000               0.6600 ns/op   3030.39 MB/s           0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64/12345
+BenchmarkParseUint64/12345
+=== RUN   BenchmarkParseUint64/12345/std
+BenchmarkParseUint64/12345/std
+BenchmarkParseUint64/12345/std-8        660645313                1.894 ns/op    2639.61 MB/s           0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64/12345/custom
+BenchmarkParseUint64/12345/custom
+BenchmarkParseUint64/12345/custom-8     1000000000               0.9590 ns/op   5213.63 MB/s           0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64/1234567890
+BenchmarkParseUint64/1234567890
+=== RUN   BenchmarkParseUint64/1234567890/std
+BenchmarkParseUint64/1234567890/std
+BenchmarkParseUint64/1234567890/std-8           424892691                3.057 ns/op    3270.97 MB/s           0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64/1234567890/custom
+BenchmarkParseUint64/1234567890/custom
+BenchmarkParseUint64/1234567890/custom-8        695652172                1.781 ns/op    5615.43 MB/s           0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64/9223372036854775807
+BenchmarkParseUint64/9223372036854775807
+=== RUN   BenchmarkParseUint64/9223372036854775807/std
+BenchmarkParseUint64/9223372036854775807/std
+BenchmarkParseUint64/9223372036854775807/std-8          243937434                4.807 ns/op    3952.94 MB/s           0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64/9223372036854775807/custom
+BenchmarkParseUint64/9223372036854775807/custom
+BenchmarkParseUint64/9223372036854775807/custom-8       197635957                6.341 ns/op    2996.36 MB/s           0 B/op          0 allocs/op
+PASS
+ok      github.com/valyala/fastjson/fastfloat   14.701s
+
+
+==========================================
+
+Running tool: /opt/homebrew/bin/go test -test.fullpath=true -benchmem -run=^$ -bench ^BenchmarkParseUint64BestEffort$ github.com/valyala/fastjson/fastfloat
+
+goos: darwin
+goarch: arm64
+pkg: github.com/valyala/fastjson/fastfloat
+cpu: Apple M2
+=== RUN   BenchmarkParseUint64BestEffort
+BenchmarkParseUint64BestEffort
+=== RUN   BenchmarkParseUint64BestEffort/0
+BenchmarkParseUint64BestEffort/0
+=== RUN   BenchmarkParseUint64BestEffort/0/std
+BenchmarkParseUint64BestEffort/0/std
+BenchmarkParseUint64BestEffort/0/std-8          1000000000               0.9354 ns/op   1069.08 MB/s           0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64BestEffort/0/custom
+BenchmarkParseUint64BestEffort/0/custom
+BenchmarkParseUint64BestEffort/0/custom-8       1000000000               0.5477 ns/op   1825.71 MB/s           0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64BestEffort/12
+BenchmarkParseUint64BestEffort/12
+=== RUN   BenchmarkParseUint64BestEffort/12/std
+BenchmarkParseUint64BestEffort/12/std
+BenchmarkParseUint64BestEffort/12/std-8         993237368                1.178 ns/op    1697.27 MB/s           0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64BestEffort/12/custom
+BenchmarkParseUint64BestEffort/12/custom
+BenchmarkParseUint64BestEffort/12/custom-8      1000000000               0.6509 ns/op   3072.77 MB/s           0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64BestEffort/12345
+BenchmarkParseUint64BestEffort/12345
+=== RUN   BenchmarkParseUint64BestEffort/12345/std
+BenchmarkParseUint64BestEffort/12345/std
+BenchmarkParseUint64BestEffort/12345/std-8      675410257                1.778 ns/op    2812.55 MB/s           0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64BestEffort/12345/custom
+BenchmarkParseUint64BestEffort/12345/custom
+BenchmarkParseUint64BestEffort/12345/custom-8   1000000000               0.9330 ns/op   5358.80 MB/s           0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64BestEffort/1234567890
+BenchmarkParseUint64BestEffort/1234567890
+=== RUN   BenchmarkParseUint64BestEffort/1234567890/std
+BenchmarkParseUint64BestEffort/1234567890/std
+BenchmarkParseUint64BestEffort/1234567890/std-8                 424645353                2.817 ns/op    3549.42 MB/s           0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64BestEffort/1234567890/custom
+BenchmarkParseUint64BestEffort/1234567890/custom
+BenchmarkParseUint64BestEffort/1234567890/custom-8              804772772                1.518 ns/op    6589.53 MB/s           0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64BestEffort/9223372036854775807
+BenchmarkParseUint64BestEffort/9223372036854775807
+=== RUN   BenchmarkParseUint64BestEffort/9223372036854775807/std
+BenchmarkParseUint64BestEffort/9223372036854775807/std
+BenchmarkParseUint64BestEffort/9223372036854775807/std-8                257704306                5.742 ns/op    3309.22 MB/s           0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64BestEffort/9223372036854775807/custom
+BenchmarkParseUint64BestEffort/9223372036854775807/custom
+BenchmarkParseUint64BestEffort/9223372036854775807/custom-8             178744808                7.981 ns/op    2380.64 MB/s           0 B/op          0 allocs/op
+PASS
+ok      github.com/valyala/fastjson/fastfloat   15.016s
+
+======================================
+原版
+Running tool: /opt/homebrew/bin/go test -test.fullpath=true -benchmem -run=^$ -bench ^BenchmarkParseUint64BestEffort$ github.com/valyala/fastjson/fastfloat
+
+goos: darwin
+goarch: arm64
+pkg: github.com/valyala/fastjson/fastfloat
+cpu: Apple M2
+=== RUN   BenchmarkParseUint64BestEffort
+BenchmarkParseUint64BestEffort
+=== RUN   BenchmarkParseUint64BestEffort/0
+BenchmarkParseUint64BestEffort/0
+=== RUN   BenchmarkParseUint64BestEffort/0/std
+BenchmarkParseUint64BestEffort/0/std
+BenchmarkParseUint64BestEffort/0/std-8          1000000000               0.9344 ns/op   1070.18 MB/s           0 B/op           0 allocs/op
+=== RUN   BenchmarkParseUint64BestEffort/0/custom
+BenchmarkParseUint64BestEffort/0/custom
+BenchmarkParseUint64BestEffort/0/custom-8       1000000000               0.5033 ns/op   1986.95 MB/s           0 B/op           0 allocs/op
+=== RUN   BenchmarkParseUint64BestEffort/12
+BenchmarkParseUint64BestEffort/12
+=== RUN   BenchmarkParseUint64BestEffort/12/std
+BenchmarkParseUint64BestEffort/12/std
+BenchmarkParseUint64BestEffort/12/std-8         1000000000               1.202 ns/op    1663.58 MB/s           0 B/op           0 allocs/op
+=== RUN   BenchmarkParseUint64BestEffort/12/custom
+BenchmarkParseUint64BestEffort/12/custom
+BenchmarkParseUint64BestEffort/12/custom-8      1000000000               0.7072 ns/op   2827.90 MB/s           0 B/op           0 allocs/op
+=== RUN   BenchmarkParseUint64BestEffort/12345
+BenchmarkParseUint64BestEffort/12345
+=== RUN   BenchmarkParseUint64BestEffort/12345/std
+BenchmarkParseUint64BestEffort/12345/std
+BenchmarkParseUint64BestEffort/12345/std-8      635503458                1.808 ns/op    2765.02 MB/s           0 B/op           0 allocs/op
+=== RUN   BenchmarkParseUint64BestEffort/12345/custom
+BenchmarkParseUint64BestEffort/12345/custom
+BenchmarkParseUint64BestEffort/12345/custom-8   986796798                1.263 ns/op    3960.18 MB/s           0 B/op           0 allocs/op
+=== RUN   BenchmarkParseUint64BestEffort/1234567890
+BenchmarkParseUint64BestEffort/1234567890
+=== RUN   BenchmarkParseUint64BestEffort/1234567890/std
+BenchmarkParseUint64BestEffort/1234567890/std
+BenchmarkParseUint64BestEffort/1234567890/std-8                 417447146                3.178 ns/op    3146.64 MB/s            0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64BestEffort/1234567890/custom
+BenchmarkParseUint64BestEffort/1234567890/custom
+BenchmarkParseUint64BestEffort/1234567890/custom-8              636296050                1.917 ns/op    5215.49 MB/s            0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64BestEffort/9223372036854775807
+BenchmarkParseUint64BestEffort/9223372036854775807
+=== RUN   BenchmarkParseUint64BestEffort/9223372036854775807/std
+BenchmarkParseUint64BestEffort/9223372036854775807/std
+BenchmarkParseUint64BestEffort/9223372036854775807/std-8                254541645                4.776 ns/op     3978.15 MB/s           0 B/op          0 allocs/op
+=== RUN   BenchmarkParseUint64BestEffort/9223372036854775807/custom
+BenchmarkParseUint64BestEffort/9223372036854775807/custom
+BenchmarkParseUint64BestEffort/9223372036854775807/custom-8             153423435                7.300 ns/op     2602.91 MB/s           0 B/op          0 allocs/op
+PASS
+ok      github.com/valyala/fastjson/fastfloat   13.569s
+

@@ -1,0 +1,20 @@
+BenchmarkParseWithGet/fastjson-get-8              262024              4550 ns/op        6179.24 MB/s           0 B/op            0 allocs/op
+BenchmarkParseWithGet/fastjson-get-8              270434              4395 ns/op    6397.03 MB/s           0 B/op          0 allocs/op
+提升 3.5%
+
+BenchmarkParseWithGet/fastjson-get-8              250521              4218 ns/op        6666.95 MB/s           0 B/op          0 allocs/op
+优化了 jnmp table: 提升了 7.9%
+
+========================
+twitter
+BenchmarkParseTwitter/fastjson-get-8               15861             84046 ns/op        7513.95 MB/s           0 B/op            0 allocs/op
+BenchmarkParseTwitter/fastjson-get-8               14596             79543 ns/op    7939.26 MB/s         0 B/op          0 allocs/op
+提升 5.7%
+
+BenchmarkParseTwitter/fastjson-get-8               17817             68668 ns/op        9196.62 MB/s           0 B/op          0 allocs/op
+去掉位运算，改查表
+BenchmarkParseTwitter/fastjson-get-8               15595             77449 ns/op        8153.92 MB/s             0 B/op          0 allocs/op
+原版的方法
+
+
+
