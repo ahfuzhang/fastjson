@@ -131,22 +131,22 @@ func (c *cache) parseValue(s string, depth int) (*Value, string, error) {
 	if depth > MaxDepth {
 		return nil, s, fmt.Errorf("too big depth for the nested JSON; it exceeds %d", MaxDepth)
 	}
-
-	if s[0] == '{' {
+	// 尝试使用 jump table
+	// 在不是简单计算的情况下，不会生成 jump table
+	switch s[0] {
+	case '{':
 		v, tail, err := c.parseObject(s[1:], depth)
 		if err != nil {
 			return nil, tail, fmt.Errorf("cannot parse object: %s", err)
 		}
 		return v, tail, nil
-	}
-	if s[0] == '[' {
+	case '[':
 		v, tail, err := c.parseArray(s[1:], depth)
 		if err != nil {
 			return nil, tail, fmt.Errorf("cannot parse array: %s", err)
 		}
 		return v, tail, nil
-	}
-	if s[0] == '"' {
+	case '"':
 		ss, tail, err := parseRawString(s[1:])
 		if err != nil {
 			return nil, tail, fmt.Errorf("cannot parse string: %s", err)
@@ -155,20 +155,17 @@ func (c *cache) parseValue(s string, depth int) (*Value, string, error) {
 		v.t = typeRawString
 		v.s = ss
 		return v, tail, nil
-	}
-	if s[0] == 't' {
+	case 't':
 		if len(s) < len("true") || s[:len("true")] != "true" {
 			return nil, s, fmt.Errorf("unexpected value found: %q", s)
 		}
 		return valueTrue, s[len("true"):], nil
-	}
-	if s[0] == 'f' {
+	case 'f':
 		if len(s) < len("false") || s[:len("false")] != "false" {
 			return nil, s, fmt.Errorf("unexpected value found: %q", s)
 		}
 		return valueFalse, s[len("false"):], nil
-	}
-	if s[0] == 'n' {
+	case 'n':
 		if len(s) < len("null") || s[:len("null")] != "null" {
 			// Try parsing NaN
 			if len(s) >= 3 && strings.EqualFold(s[:3], "nan") {
@@ -180,16 +177,78 @@ func (c *cache) parseValue(s string, depth int) (*Value, string, error) {
 			return nil, s, fmt.Errorf("unexpected value found: %q", s)
 		}
 		return valueNull, s[len("null"):], nil
+	case ' ':
+		panic("to make complier happy, this case will never be hit, since skipWS is called before parseValue")
+	case '\t':
+		panic("to make complier happy, this case will never be hit, since skipWS is called before parseValue 2")
+	default:
+		ns, tail, err := parseRawNumber(s)
+		if err != nil {
+			return nil, tail, fmt.Errorf("cannot parse number: %s", err)
+		}
+		v := c.getValue()
+		v.t = TypeNumber
+		v.s = ns
+		return v, tail, nil
 	}
+	// if s[0] == '{' {
+	// 	v, tail, err := c.parseObject(s[1:], depth)
+	// 	if err != nil {
+	// 		return nil, tail, fmt.Errorf("cannot parse object: %s", err)
+	// 	}
+	// 	return v, tail, nil
+	// }
+	// if s[0] == '[' {
+	// 	v, tail, err := c.parseArray(s[1:], depth)
+	// 	if err != nil {
+	// 		return nil, tail, fmt.Errorf("cannot parse array: %s", err)
+	// 	}
+	// 	return v, tail, nil
+	// }
+	// if s[0] == '"' {
+	// 	ss, tail, err := parseRawString(s[1:])
+	// 	if err != nil {
+	// 		return nil, tail, fmt.Errorf("cannot parse string: %s", err)
+	// 	}
+	// 	v := c.getValue()
+	// 	v.t = typeRawString
+	// 	v.s = ss
+	// 	return v, tail, nil
+	// }
+	// if s[0] == 't' {
+	// 	if len(s) < len("true") || s[:len("true")] != "true" {
+	// 		return nil, s, fmt.Errorf("unexpected value found: %q", s)
+	// 	}
+	// 	return valueTrue, s[len("true"):], nil
+	// }
+	// if s[0] == 'f' {
+	// 	if len(s) < len("false") || s[:len("false")] != "false" {
+	// 		return nil, s, fmt.Errorf("unexpected value found: %q", s)
+	// 	}
+	// 	return valueFalse, s[len("false"):], nil
+	// }
+	// if s[0] == 'n' {
+	// 	if len(s) < len("null") || s[:len("null")] != "null" {
+	// 		// Try parsing NaN
+	// 		if len(s) >= 3 && strings.EqualFold(s[:3], "nan") {
+	// 			v := c.getValue()
+	// 			v.t = TypeNumber
+	// 			v.s = s[:3]
+	// 			return v, s[3:], nil
+	// 		}
+	// 		return nil, s, fmt.Errorf("unexpected value found: %q", s)
+	// 	}
+	// 	return valueNull, s[len("null"):], nil
+	// }
 
-	ns, tail, err := parseRawNumber(s)
-	if err != nil {
-		return nil, tail, fmt.Errorf("cannot parse number: %s", err)
-	}
-	v := c.getValue()
-	v.t = TypeNumber
-	v.s = ns
-	return v, tail, nil
+	// ns, tail, err := parseRawNumber(s)
+	// if err != nil {
+	// 	return nil, tail, fmt.Errorf("cannot parse number: %s", err)
+	// }
+	// v := c.getValue()
+	// v.t = TypeNumber
+	// v.s = ns
+	// return v, tail, nil
 }
 
 func (c *cache) parseArray(s string, depth int) (*Value, string, error) {
