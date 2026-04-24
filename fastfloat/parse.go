@@ -20,7 +20,7 @@ func ParseUint64BestEffort(s string) uint64 {
 	}
 	i := uint(0)
 	for ; i < uint(len(s)); i++ {
-		if !(s[i] >= '0' && s[i] <= '9') {
+		if s[i] < '0' || s[i] > '9' {
 			break
 		}
 	}
@@ -28,7 +28,7 @@ func ParseUint64BestEffort(s string) uint64 {
 		// Unparsed tail left.
 		return 0
 	}
-	var ss *[18]byte = (*[18]byte)(unsafe.Pointer(unsafe.StringData(s)))  // to avoid bound check
+	var ss *[18]byte = (*[18]byte)(unsafe.Pointer(unsafe.StringData(s))) // to avoid bound check
 	// use jump table and loop unrolling
 	var d uint64
 	switch i {
@@ -40,7 +40,7 @@ func ParseUint64BestEffort(s string) uint64 {
 		d = uint64(ss[0]-'0')*10 + uint64(ss[1]-'0')
 	case 3:
 		d = uint64(ss[0] - '0')
-		d *= 10  // n*10 will be optimized by the compiler to (n<<3) + (n<<1)
+		d *= 10 // n*10 will be optimized by the compiler to (n<<3) + (n<<1)
 		d += uint64(ss[1] - '0')
 		d *= 10
 		d += uint64(ss[2] - '0')
@@ -390,12 +390,25 @@ func ParseUint64BestEffort(s string) uint64 {
 //
 // See also ParseUint64BestEffort.
 func ParseUint64(s string) (uint64, error) {
-	if len(s) == 0 {
+	// hot path
+	switch len(s) {
+	case 0:
 		return 0, fmt.Errorf("cannot parse uint64 from empty string")
+	case 1:
+		if s[0] >= '0' && s[0] <= '9' {
+			return uint64(s[0] - '0'), nil
+		}
+	case 2:
+		if s[0] >= '0' && s[0] <= '9' && s[1] >= '0' && s[1] <= '9' {
+			return uint64(s[0]-'0')*10 + uint64(s[1]-'0'), nil
+		}
 	}
+	// if len(s) == 1 && s[0] >= '0' && s[0] <= '9' {
+	// 	return uint64(s[0] - '0'), nil
+	// }
 	i := uint(0)
 	for ; i < uint(len(s)); i++ {
-		if !(s[i] >= '0' && s[i] <= '9') {
+		if s[i] < '0' || s[i] > '9' {
 			break
 		}
 	}
@@ -419,7 +432,7 @@ func ParseUint64(s string) (uint64, error) {
 		d = uint64(ss[0]-'0')*10 + uint64(ss[1]-'0')
 	case 3:
 		d = uint64(ss[0] - '0')
-		d *= 10  // n*10 will be optimized by the compiler to (n<<3) + (n<<1)
+		d *= 10 // n*10 will be optimized by the compiler to (n<<3) + (n<<1)
 		d += uint64(ss[1] - '0')
 		d *= 10
 		d += uint64(ss[2] - '0')
@@ -756,7 +769,7 @@ func ParseUint64(s string) (uint64, error) {
 	default:
 		dd, err := strconv.ParseUint(s, 10, 64)
 		if err != nil {
-			return 0,err
+			return 0, err
 		}
 		return dd, nil
 	}

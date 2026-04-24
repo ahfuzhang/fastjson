@@ -170,6 +170,39 @@ func BenchmarkParse(b *testing.B) {
 	})
 }
 
+func BenchmarkParseTwitter(b *testing.B) {
+	b.Run("fastjson-get", func(b *testing.B) {
+		benchmarkFastJSONParseGet(b, twitterFixture)
+	})
+}
+
+func BenchmarkParseFastjson(b *testing.B) {
+	b.Run("small fastjson", func(b *testing.B) {
+		benchmarkFastJSONParse(b, smallFixture)
+	})
+	b.Run("small fastjson-get", func(b *testing.B) {
+		benchmarkFastJSONParseGet(b, smallFixture)
+	})
+	b.Run("medium fastjson", func(b *testing.B) {
+		benchmarkFastJSONParse(b, mediumFixture)
+	})
+	b.Run("medium fastjson-get", func(b *testing.B) {
+		benchmarkFastJSONParseGet(b, mediumFixture)
+	})
+	b.Run("large fastjson", func(b *testing.B) {
+		benchmarkFastJSONParse(b, largeFixture)
+	})
+	b.Run("large fastjson-get", func(b *testing.B) {
+		benchmarkFastJSONParseGet(b, largeFixture)
+	})
+	b.Run("twitter large fastjson", func(b *testing.B) {
+		benchmarkFastJSONParse(b, largeFixture)
+	})
+	b.Run("twitter fastjson-get", func(b *testing.B) {
+		benchmarkFastJSONParseGet(b, twitterFixture)
+	})
+}
+
 var (
 	// small, medium and large fixtures are from https://github.com/buger/jsonparser/blob/f04e003e4115787c6272636780bc206e5ffad6c4/benchmark/benchmark.go
 	smallFixture  = getFromFile("testdata/small.json")
