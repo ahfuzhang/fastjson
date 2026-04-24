@@ -15,6 +15,17 @@ func BenchmarkParseUint64(b *testing.B) {
 	}
 }
 
+/*
+go test -test.fullpath=true -benchmem -run=^$ -bench ^BenchmarkParseUint64_AllLen$ github.com/valyala/fastjson/fastfloat
+
+	go test \
+		  -test.fullpath=true \
+		  -benchmem \
+		  -run=^$ \
+		  -bench ^BenchmarkParseUint64_AllLen$ \
+		  -benchtime=50000000x \
+		  github.com/valyala/fastjson/fastfloat
+*/
 func BenchmarkParseUint64_AllLen(b *testing.B) {
 	for _, s := range []string{"0", "12", "123", "1234", "12345",
 		"123456",
@@ -38,6 +49,40 @@ func BenchmarkParseUint64_AllLen(b *testing.B) {
 				var d uint64
 				for pb.Next() {
 					dd, err := ParseUint64(s)
+					if err != nil {
+						panic(fmt.Errorf("unexpected error: %s", err))
+					}
+					d += dd
+				}
+				atomic.AddUint64(&Sink, uint64(d))
+			})
+		})
+	}
+}
+
+func BenchmarkParseUint64Old_AllLen(b *testing.B) {
+	for _, s := range []string{"0", "12", "123", "1234", "12345",
+		"123456",
+		"1234567",
+		"12345678",
+		"123456789",
+		"1234567890",
+		"12345678901",
+		"123456789012",
+		"1234567890123",
+		"12345678901234",
+		"123456789012345",
+		"1234567890123456",
+		"12345678901234567",
+		"123456789012345678",
+		"1234567890123456789"} {
+		b.Run("custom_"+s, func(b *testing.B) {
+			b.ReportAllocs()
+			b.SetBytes(int64(len(s)))
+			b.RunParallel(func(pb *testing.PB) {
+				var d uint64
+				for pb.Next() {
+					dd, err := ParseUint64Old(s)
 					if err != nil {
 						panic(fmt.Errorf("unexpected error: %s", err))
 					}

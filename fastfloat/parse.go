@@ -776,6 +776,42 @@ func ParseUint64(s string) (uint64, error) {
 	return d, nil
 }
 
+func ParseUint64Old(s string) (uint64, error) {
+	if len(s) == 0 {
+		return 0, fmt.Errorf("cannot parse uint64 from empty string")
+	}
+	i := uint(0)
+	d := uint64(0)
+	j := i
+	// todo: 使用 jump table，去掉循环
+	for i < uint(len(s)) {
+		// todo: 使用 simd，检查多个字符是否为 '0'-'9'
+		if s[i] >= '0' && s[i] <= '9' {
+			d = d*10 + uint64(s[i]-'0')
+			i++
+			if i > 18 {
+				// The integer part may be out of range for uint64.
+				// Fall back to slow parsing.
+				dd, err := strconv.ParseUint(s, 10, 64)
+				if err != nil {
+					return 0, err
+				}
+				return dd, nil
+			}
+			continue
+		}
+		break
+	}
+	if i <= j {
+		return 0, fmt.Errorf("cannot parse uint64 from %q", s)
+	}
+	if i < uint(len(s)) {
+		// Unparsed tail left.
+		return 0, fmt.Errorf("unparsed tail left after parsing uint64 from %q: %q", s, s[i:])
+	}
+	return d, nil
+}
+
 // ParseInt64BestEffort parses int64 number s.
 //
 // It is equivalent to strconv.ParseInt(s, 10, 64), but is faster.
